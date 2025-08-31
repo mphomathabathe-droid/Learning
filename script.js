@@ -5,7 +5,6 @@ function displayTemperature(response) {
   cityElement.innerHTML = response.data.city;
   temperatureElement.innerHTML = temperature;
 }
-
 function search(event) {
   event.preventDefault();
   let searchInputElement = document.querySelector("#search-input");
@@ -16,7 +15,6 @@ function search(event) {
 
   axios.get(apiUrl).then(displayTemperature);
 }
-
 function formatDate(date) {
   let minutes = date.getMinutes();
   let hours = date.getHours();
@@ -37,7 +35,7 @@ function formatDate(date) {
     "Wednesday",
     "Thursday",
     "Friday",
-    "Saturday"
+    "Saturday",
   ];
 
   let formattedDay = days[day];
@@ -51,3 +49,4 @@ let currentDateELement = document.querySelector("#current-date");
 let currentDate = new Date();
 
 currentDateELement.innerHTML = formatDate(currentDate);
+
