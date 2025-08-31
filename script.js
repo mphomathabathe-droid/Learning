@@ -1,52 +1,46 @@
-function displayTemperature(response) {
-  let temperatureElement = document.querySelector("#current-temperature");
-  let temperature = Math.round(response.data.temperature.current);
-  let cityElement = document.querySelector("#current-city");
-  cityElement.innerHTML = response.data.city;
-  temperatureElement.innerHTML = temperature;
-}
-function search(event) {
-  event.preventDefault();
-  let searchInputElement = document.querySelector("#search-input");
-  let city = searchInputElement.value;
+// This is a conceptual script. You'll need an actual API key and weather service.
+const searchForm = document.getElementById('search-form');
+const searchInput = document.querySelector('.search-input');
+const currentCityElement = document.getElementById('current-city');
+const currentDateElement = document.getElementById('current-date');
+const currentTemperatureElement = document.getElementById('current-temperature');
+const currentDetailsElement = document.querySelector('.current-details');
 
-  let apiKey = "b2a5adcct04b33178913oc335f405433";
-  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
+// Function to fetch weather data
+async function fetchWeather(city) {
+    const apiKey = "YOUR_API_KEY"; // Replace with your actual API key
+    const apiUrl = `https://api.exampleweather.com/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-  axios.get(apiUrl).then(displayTemperature);
-}
-function formatDate(date) {
-  let minutes = date.getMinutes();
-  let hours = date.getHours();
-  let day = date.getDay();
-
-  if (minutes < 10) {
-    minutes = `0${minutes}`;
-  }
-
-  if (hours < 10) {
-    hours = `0${hours}`;
-  }
-
-  let days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
-  let formattedDay = days[day];
-  return `${formattedDay} ${hours}:${minutes}`;
+    try {
+        const response = await axios.get(apiUrl);
+        const data = response.data;
+        
+        // Update the HTML with the new data
+        currentCityElement.textContent = data.name;
+        currentTemperatureElement.textContent = Math.round(data.main.temp);
+        currentDateElement.textContent = formatCurrentDate(new Date());
+        currentDetailsElement.innerHTML = `${data.weather[0].description} <br> Humidity: <strong>${data.main.humidity}%</strong>, Wind: <strong>${data.wind.speed}km/h</strong>`;
+        
+    } catch (error) {
+        alert('Could not find weather for that city.');
+        console.error('Error fetching weather data:', error);
+    }
 }
 
-let searchForm = document.querySelector("#search-form");
-searchForm.addEventListener("submit", search);
+// Function to format the date
+function formatCurrentDate(date) {
+    const dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const day = dayOfWeek[date.getDay()];
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day} ${hours}:${minutes}`;
+}
 
-let currentDateELement = document.querySelector("#current-date");
-let currentDate = new Date();
-
-currentDateELement.innerHTML = formatDate(currentDate);
-
+// Event listener for form submission
+searchForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const city = searchInput.value.trim();
+    if (city) {
+        fetchWeather(city);
+    }
+})
