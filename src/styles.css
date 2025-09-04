@@ -46,10 +46,6 @@ main {
   padding: 30px 0;
 }
 
-.current-temperature {
-  font-size: 48px;
-}
-
 .current-weather {
   display: flex;
   justify-content: space-between;
@@ -60,6 +56,7 @@ main {
   font-weight: 900;
   margin: 0;
 }
+
 .current-details {
   color: rgba(39, 33, 66, 0.4);
   font-size: 16px;
@@ -71,9 +68,12 @@ main {
   color: #f65282;
 }
 
+.current-temperature {
+  display: flex; /* Use flexbox for icon and temperature alignment */
+  align-items: center; /* Vertically center the items */
+}
+
 .current-temperature-icon {
-  position: relative;
-  top: -8px;
   font-size: 40px;
   margin-right: 10px;
 }
@@ -93,6 +93,5 @@ footer {
   border-top: 1px solid #f9f7fe;
   text-align: center;
   padding-top: 15px;
-
   color: rgba(39, 33, 66, 0.4);
 }
